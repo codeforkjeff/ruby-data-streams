@@ -102,7 +102,7 @@ In non-trivial cases involving large sets of data and lots of operations, stream
 
 In a nutshell, lazy `Enumerable` objects are how Ruby lets us handle streams of data and write pipelines for processing them.
 
-Ruby's `Enumerable` module is used everywhere in the stdlib where you need to enumerate things. The only requirement for a class to be an `Enumerable` is that it should implement `#each`. An `Enumerable` provides a LOT of operations on top of `#each`, including:
+Ruby's [Enumerable](http://ruby-doc.org/core-2.3.1/Enumerable.html) module is used everywhere in the stdlib where you need to enumerate things. The only requirement for a class to be an `Enumerable` is that it should implement `#each`. An `Enumerable` provides a LOT of operations on top of `#each`, including:
 
 - `map/collect`: to transform or mutate-in-place items
 - `select/reject`: filter items
@@ -119,7 +119,7 @@ Ruby's `Enumerable` module is used everywhere in the stdlib where you need to en
 
 Lazy enumerables were added in Ruby 2.0.0. There is an `Enumerable::Lazy` module, and `Enumerable` has a `#lazy` method to make an existing `Enumerable` instance into a lazy one. This makes enumerables behave like streams. Unlike most non-lazy enumerables, a stream can only be consumed ONCE. Many of the above operations on an `Enumerable::Lazy` object return an `Enumerable::Lazy` object in turn, making it possible to chain operations together to construct a pipeline.
 
-Additionally, you can use the `Enumerator` and `Enumerator::Lazy` classes to create enumerables on-the-fly.
+Additionally, you can use the [Enumerator](http://ruby-doc.org/core-2.3.1/Enumerator.html) and `Enumerator::Lazy` classes to create enumerables on-the-fly.
 
 Laziness means that these enumerables don't do anything when they are constructed. They have to be evaluated, either by calling the `#force` method, or using one of the methods that forces evaluation, such as `#each`. An important consideration: if evaluating a lazy enumerable results in a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
 
