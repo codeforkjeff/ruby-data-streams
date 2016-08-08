@@ -100,7 +100,7 @@ In non-trivial cases involving large sets of data and lots of operations, stream
 
 ## Enumerables, Laziness, Force, and Enumerators
 
-In a nutshell, lazy `Enumerable`s are how Ruby lets us handle streams of data and write pipelines for processing them.
+In a nutshell, lazy `Enumerable` objects are how Ruby lets us handle streams of data and write pipelines for processing them.
 
 Ruby's `Enumerable` module is used everywhere in the stdlib where you need to enumerate things. The only requirement for a class to be an `Enumerable` is that it should implement `#each`. An `Enumerable` provides a LOT of operations on top of `#each`, including:
 
