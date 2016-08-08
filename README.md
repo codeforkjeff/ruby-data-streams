@@ -94,7 +94,7 @@ adding 10 to 5
 filtering 15 on evenness
 ```
 
-`(1..5).lazy` doesn't return a data structure, but a stream of integers. Each one is processed one at a time through the pipeline. This means we are never storing more than one integer in memory at a time. There are no immediate data structures, such as Arrays, that are generated; only a "chain" of lazy enumerables that comprise the stream.
+`(1..5).lazy` doesn't return a data structure, but a stream of integers. Each one is processed one at a time through the pipeline. This means we are never storing more than one integer in memory at a time. There are no intermediate data structures, such as Arrays, that are generated; only a "chain" of lazy enumerables that comprise the stream.
 
 In non-trivial cases involving large sets of data and lots of operations, streams are better at optimizing for both space and time: they minimize the amount of memory used, and make it easy to parallelize operations for faster performance.
 
