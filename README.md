@@ -121,7 +121,7 @@ Lazy enumerables were added in Ruby 2.0.0. There is an `Enumerable::Lazy` module
 
 Additionally, you can use the [Enumerator](http://ruby-doc.org/core-2.3.1/Enumerator.html) and `Enumerator::Lazy` classes to create enumerables on-the-fly.
 
-Laziness means that these enumerables don't do anything when they are constructed. They have to be evaluated, either by calling the `#force` method, or using one of the methods that forces evaluation, such as `#each`. An important consideration: if evaluating a lazy enumerable results in a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
+Laziness means that these enumerables don't do anything when they are constructed. They have to be evaluated, either by calling the `#force` method, or using one of the methods that forces evaluation, such as `#each`. An important consideration: if `#force` evaluates a lazy enumerable into a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
 
 ## Real World Complexity
 
@@ -145,7 +145,11 @@ Treating an entire pipeline as an abstraction, similar to how you might use a sc
 
 ## Performance
 
-Compared to an equivalent iterative solution, using lazy enumerables is known to be somewhat slower in Ruby. How much slower seems to depend on what the actual pipeline looks like. This is offset by the fact that you can easily parallelize operations. Even without parallelization, this shouldn't be a problem, but it's something to keep in mind.
+Compared to an equivalent iterative solution, lazy enumerables are known to be somewhat slower in Ruby. This is due to implementation overhead. How much slower seems to depend on what the actual pipeline looks like.
+
+Despite the overhead, keep in mind that if you want to support arbitrary-length data streams, laziness is literally your only option, because at some point, you will run out of memory, and performance then becomes a moot issue.
+
+In addition, the overhead is more than offset by the fact that you can easily parallelize operations.
 
 ## Questions
 
