@@ -121,7 +121,22 @@ Lazy enumerables were added in Ruby 2.0.0. There is an `Enumerable::Lazy` module
 
 Additionally, you can use the [Enumerator](http://ruby-doc.org/core-2.3.1/Enumerator.html) and `Enumerator::Lazy` classes to create enumerables on-the-fly.
 
-Laziness means that these enumerables don't do anything when they are constructed. They have to be evaluated, either by calling the `#force` method, or using one of the methods that forces evaluation, such as `#each`. An important consideration: if `#force` evaluates a lazy enumerable into a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
+Laziness means that these enumerables don't do anything when they are constructed. Try this in irb:
+
+```ruby
+# This does NOT print anything.
+x = (1..5).lazy.map { |i|
+  puts "adding 10 to #{i}"
+  i + 10
+}
+
+# We have to force it to evaluate, in order to see the output from the puts commands:
+x.force
+```
+
+Lazy enumerables have to be evaluated, either by calling the `#force` method or using one of the methods that forces evaluation, such as `#each` or `#reduce`.
+
+An important consideration: if `#force` evaluates a lazy enumerable into a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
 
 ## Real World Complexity
 
