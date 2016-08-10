@@ -6,8 +6,9 @@ This is a brief exploration of using Ruby to work with [streams and pipelines](h
 You've already used these concepts if you've ever done anything like this in a shell:
 
 ```bash
-# find all usernames with "robert", sort them, and display a count
-grep "robert" usernames.txt | sort | wc -l
+# find all unique people named "robert" in a file containing 
+# class enrollments data and display a count
+grep "robert" class_enrollments.txt | awk '{print $1}' | uniq | wc -l
 ```
 
 The usefulness of this model is best understood in contrast to the "ad-hoc" way in which data processing scripts are often written. Such scripts have the following problems:
@@ -119,8 +120,6 @@ Ruby's [Enumerable](http://ruby-doc.org/core-2.3.1/Enumerable.html) module is us
 
 Lazy enumerables were added in Ruby 2.0.0. There is an `Enumerable::Lazy` module, and `Enumerable` has a `#lazy` method to make an existing `Enumerable` instance into a lazy one. This makes enumerables behave like streams. Unlike most non-lazy enumerables, a stream can only be consumed ONCE. Many of the above operations on an `Enumerable::Lazy` object return an `Enumerable::Lazy` object in turn, making it possible to chain operations together to construct a pipeline.
 
-Additionally, you can use the [Enumerator](http://ruby-doc.org/core-2.3.1/Enumerator.html) and `Enumerator::Lazy` classes to create enumerables on-the-fly.
-
 Laziness means that these enumerables don't do anything when they are constructed. Try this in irb:
 
 ```ruby
@@ -138,13 +137,15 @@ Lazy enumerables have to be evaluated, either by calling the `#force` method or 
 
 An important consideration: if `#force` evaluates a lazy enumerable into a large array, it will take up a lot of memory, so be careful. Most of the time, you should probably use `#each` instead at the end of the pipeline, and deal with each object one at a time (usually storing it to a file or database, or printing it to stdout).
 
+Additionally, you can use the [Enumerator](http://ruby-doc.org/core-2.3.1/Enumerator.html) and `Enumerator::Lazy` classes to create enumerables on-the-fly.
+
 ## Real World Complexity
 
 But not every complex data processing problem can be expressed in terms of a single pipeline.
 
 Splitting and merging: `Enumerable` doesn't support splitting (i.e. teeing) and merging out of the box. You need to roll your own solution or find a gem to do this.
 
-Storing results: You might have to write the result of a pipeline to a file, before using that data in another pipeline. For example, you need to do this when using the results in several places in another pipeline.
+Storing results: You might have to write the result of a pipeline to a file, before using that data in another pipeline. For example, you need to do this when sorting, or when using the data in several operations in another pipeline.
 
 Stateful operations: Operations may also need to store state in auxiliary objects. For example, an operation that counts the number of records that fall into various buckets would store that information outside the stream.
 
@@ -172,7 +173,7 @@ How to design a data processing system with dependencies among streams and pipel
 
 Is there a need for some kind of framework, or are these patterns enough?
 
-## Non-Ruby options
+## Comparisons to Non-Ruby Options
 
 One of the major drawbacks to Ruby (in my opinion) is the lack of type checking. Java and Scala are two languages that are better at this, though arguably, development is slower using them.
 
