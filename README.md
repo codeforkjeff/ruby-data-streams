@@ -99,11 +99,11 @@ filtering 15 on evenness
 
 In non-trivial cases involving large sets of data and lots of operations, streams are better at optimizing for both space and time: they minimize the amount of memory used, and make it easy to parallelize operations for faster performance.
 
-## Enumerables, Laziness, Force, and Enumerators
+## Lazy Enumerables
 
 In a nutshell, lazy `Enumerable` objects are how Ruby lets us handle streams of data and write pipelines for processing them.
 
-Ruby's [Enumerable](http://ruby-doc.org/core-2.3.1/Enumerable.html) module is used everywhere in the stdlib where you need to enumerate things. The only requirement for a class to be an `Enumerable` is that it should implement `#each`. An `Enumerable` provides a LOT of operations on top of `#each`, including:
+Ruby's [Enumerable](http://ruby-doc.org/core-2.3.1/Enumerable.html) module is used everywhere in the stdlib where you need to enumerate things. The only requirement for a class to be an `Enumerable` is that it should implement `#each`. An `Enumerable` provides a LOT of powerful operations on top of `#each`, including:
 
 - `map/collect`: to transform or mutate-in-place items
 - `select/reject`: filter items
@@ -118,9 +118,11 @@ Ruby's [Enumerable](http://ruby-doc.org/core-2.3.1/Enumerable.html) module is us
   accumulator
 - and a bunch more...
 
-Lazy enumerables were added in Ruby 2.0.0. There is an `Enumerable::Lazy` module, and `Enumerable` has a `#lazy` method to make an existing `Enumerable` instance into a lazy one. This makes enumerables behave like streams. Unlike most non-lazy enumerables, a stream can only be consumed ONCE. Many of the above operations on an `Enumerable::Lazy` object return an `Enumerable::Lazy` object in turn, making it possible to chain operations together to construct a pipeline.
+Lazy enumerables were added in Ruby 2.0.0. Laziness means that items are returned on demand, one at a time. This makes enumerables behave like streams. Unlike most non-lazy enumerables, a stream can only be consumed ONCE.
 
-Laziness means that these enumerables don't do anything when they are constructed. Try this in irb:
+There is an `Enumerable::Lazy` module, and `Enumerable` has a `#lazy` method to make an existing `Enumerable` instance into a lazy one.  Many of the above operations on an `Enumerable::Lazy` object return an `Enumerable::Lazy` object in turn, making it possible to chain operations together to construct a pipeline.
+
+A lazy enumerable doesn't do anything when it is constructed. Try this in irb:
 
 ```ruby
 # This does NOT print anything.
