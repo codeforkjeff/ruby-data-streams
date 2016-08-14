@@ -99,6 +99,8 @@ filtering 15 on evenness
 
 In non-trivial cases involving large sets of data and lots of operations, streams are better at optimizing for both space and time: they minimize the amount of memory used, and make it easy to parallelize operations for faster performance.
 
+See the `demo.rb` and `run.sh` scripts for an illustration of the difference in memory usage.
+
 ## Lazy Enumerables
 
 In a nutshell, lazy `Enumerable` objects are how Ruby lets us handle streams of data and write pipelines for processing them.
